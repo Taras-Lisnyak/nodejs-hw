@@ -21,7 +21,7 @@ app.use(pinoHttp());
 app.get('/notes', async (req, res, next) => {
   try {
     const notes = await getAllNotes();
-    res.json(notes);
+    res.json({ message: notes });
   } catch (error) {
     next(error);
   }
@@ -34,7 +34,7 @@ app.get('/notes/:noteId', async (req, res, next) => {
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
-    res.json(note);
+    res.json({ message: note });
   } catch (error) {
     next(error);
   }
