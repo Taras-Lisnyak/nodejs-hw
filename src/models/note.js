@@ -8,7 +8,7 @@ const noteSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: 'Todo',
-      enum: ['Todo', 'Important', 'Personal', 'Other'],
+      enum: ['Todo', 'Important', 'Personal', 'Work', 'Meeting', 'Shopping', 'Ideas', 'Travel', 'Finance', 'Health', 'Other'],
     },
   },
   { timestamps: true }
