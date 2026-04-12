@@ -1,10 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pinoHttp from 'pino-http';
 import { logger } from './middleware/logger.js';
-import notFoundHandler  from './middleware/notFoundHandler.js';
-import errorHandler   from './middleware/errorHandler.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import notesRoutes from './routes/notesRoutes.js';
 
@@ -17,15 +16,8 @@ const port = process.env.PORT || 3000;
 app.use(logger);
 app.use(cors());
 app.use(express.json());
-app.use(pinoHttp());
 
 app.use(notesRoutes); // Використовуємо маршрути для нотаток
-app.use('/api', notesRoutes); // Додатковий префікс для сумісності
-
-app.get('/test-error', () => {
-  throw new Error('Simulated server error');
-});
-
 
 // Middleware 404
 app.use(notFoundHandler);

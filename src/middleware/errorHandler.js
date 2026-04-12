@@ -1,5 +1,13 @@
-const errorHandler = (err, req, res, next) => {
+import { HttpError } from 'http-errors';
+
+export const errorHandler = (err, req, res, next) => {
   console.error("Error Middleware:", err);
+
+  if (err instanceof HttpError) {
+    return res.status(err.status).json({
+      message: err.message || err.name,
+    });
+  }
 
   const status = err.status || err.statusCode || 500;
   const message = err.message || "Internal Server Error";
@@ -12,5 +20,3 @@ const errorHandler = (err, req, res, next) => {
         : message,
   });
 };
-
-export default errorHandler;

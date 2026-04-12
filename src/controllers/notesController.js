@@ -38,7 +38,7 @@ export const deleteNote = async (req, res) => {
   res.status(200).json(note);
 };
 
-export const updateStudent = async (req, res) => {
+export const updateNote = async (req, res) => {
   const { noteId } = req.params;
 
   const note = await Note.findOneAndUpdate(

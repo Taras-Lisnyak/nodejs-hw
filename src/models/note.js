@@ -1,10 +1,18 @@
 import mongoose from 'mongoose';
 
-const noteSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  content: { type: String, required: true },
-  tag: { type: String, required: true },
-});
+const noteSchema = new mongoose.Schema(
+  {
+    title: { type: String, trim: true, required: true },
+    content: { type: String, trim: true, default: '', required: false },
+    tag: {
+      type: String,
+      trim: true,
+      default: 'Todo',
+      enum: ['Todo', 'Important', 'Personal', 'Other'],
+    },
+  },
+  { timestamps: true }
+);
 
 const Note = mongoose.model('Note', noteSchema);
 
