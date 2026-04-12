@@ -1,6 +1,23 @@
+import { HttpError } from "http-errors";
+
 const errorHandler = (err, req, res, next) => {
-  req.log.error({ err }, 'Internal server error');
-  res.status(500).json({ message: err.message || 'Internal server error' });
+  console.error("Error Middleware:", err);
+
+  // Якщо помилка створена через http-errors
+  if (err instanceof HttpError) {
+    return res.status(err.status).json({
+      message: err.message || err.name,
+    });
+  }
+
+  const isProd = process.env.NODE_ENV === "production";
+
+  // Усі інші помилки — як внутрішні
+  res.status(500).json({
+    message: isProd
+      ? "Something went wrong. Please try again later."
+      : err.message,
+  });
 };
 
 export default errorHandler;
