@@ -4,15 +4,13 @@ import { TAGS } from "../constants/tags.js";
 
 export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
-    title: Joi.string().min(1).max(30).required().messages({
+    title: Joi.string().min(1).required().messages({
       "string.base": "Title should be a string",
       "string.min": "Title should have at least 1 character",
-      "string.max": "Title should have at most 30 characters",
       "any.required": "Title is required",
     }),
-    content: Joi.string().max(30).allow('').messages({
+    content: Joi.string().allow('').messages({
       "string.base": "Content should be a string",
-      "string.max": "Content should have at most 30 characters",
     }),
     tag: Joi.string().valid(...TAGS).optional().messages({
       "any.only": `Tag must be one of the following: ${TAGS.join(', ')}`,
@@ -36,14 +34,12 @@ export const updateNoteSchema = {
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
   [Segments.BODY]: Joi.object({
-    title: Joi.string().min(1).max(30).messages({
+    title: Joi.string().min(1).messages({
       "string.base": "Title should be a string",
       "string.min": "Title should have at least 1 character",
-      "string.max": "Title should have at most 30 characters",
     }),
-    content: Joi.string().max(30).allow('').messages({
+    content: Joi.string().allow('').messages({
       "string.base": "Content should be a string",
-      "string.max": "Content should have at most 30 characters",
     }),
     tag: Joi.string().valid(...TAGS).optional().messages({
       "any.only": `Tag must be one of the following: ${TAGS.join(', ')}`,

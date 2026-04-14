@@ -23,4 +23,4 @@ noteSchema.index({ title: 'text', content: 'text' },
 
 const Note = mongoose.model('Note', noteSchema);
 
-export default Note;
+export { Note };
