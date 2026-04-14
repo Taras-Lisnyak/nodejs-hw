@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { errors } from 'celebrate';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -21,6 +22,9 @@ app.use(notesRoutes); // Використовуємо маршрути для н
 
 // Middleware 404
 app.use(notFoundHandler);
+
+// обробка помилок від celebrate (валідація)
+app.use(errors());
 
 // Middleware 500
 app.use(errorHandler);
