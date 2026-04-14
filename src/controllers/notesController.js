@@ -1,4 +1,4 @@
-import { Note } from '../models/note.js';
+import Note from '../models/note.js';
 import createHttpError from 'http-errors';
 
 
@@ -64,18 +64,15 @@ export const getAllNotes = async (req, res) => {
   }
 
 
-  const [totalItems, notes] = await Promise.all([
-    notesQuery.clone().countDocuments(),
-    notesQuery.skip(skip).limit(perPage),
-    notesQuery.sort({ [sortBy]: sortOrder }),
-  ]);
+  const totalNotes = await notesQuery.clone().countDocuments();
+  const notes = await notesQuery.sort({ [sortBy]: sortOrder }).skip(skip).limit(perPage);
 
-  const totalPages = Math.ceil(totalItems / perPage);
+  const totalPages = Math.ceil(totalNotes / perPage);
 
   res.status(200).json({
     page,
     perPage,
-    totalItems,
+    totalNotes,
     totalPages,
     notes,
   });
