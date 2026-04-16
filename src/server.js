@@ -6,7 +6,10 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
+import authRoutes from './routes/authRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
+import cookieParser from 'cookie-parser';
+
 
 dotenv.config();
 
@@ -17,7 +20,9 @@ const port = process.env.PORT || 3000;
 app.use(logger);
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
+app.use(authRoutes); // Використовуємо маршрути для аутентифікації
 app.use(notesRoutes); // Використовуємо маршрути для нотаток
 
 // Middleware 404
