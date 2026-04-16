@@ -4,10 +4,12 @@ import createHttpError from 'http-errors';
 
 // POST /notes — створює нотатку
 export const createNote = async (req, res) => {
-  const note = await Note.create(req.body);
-  // Додаємо властивість userId
+  const note = await Note.create({
+    ...req.body,
     userId: req.user._id,
-    res.status(201).json(note);
+  });
+
+  res.status(201).json(note);
 };
 
 // GET /notes/:noteId — повертає нотатку за ID
@@ -53,22 +55,24 @@ export const updateNote = async (req, res) => {
 };
 
 export const getAllNotes = async (req, res) => {
-  const { page = 1, perPage = 10, search, tag, sortBy = "_id", sortOrder = "asc", } = req.query;
+  const { page = 1, perPage = 10, search, tag, sortBy = "_id", sortOrder = "asc" } = req.query;
   const skip = (page - 1) * perPage;
 
-  const notesQuery = Note.find({ userId: req.user._id });
+  const queryFilter = { userId: req.user._id };
 
-  // Будуємо фільтр
-    if (search) {
-      notesQuery.where({ $text: { $search: search } });
+  if (search) {
+    queryFilter.$text = { $search: search };
   }
+
   if (tag) {
-    notesQuery.where("tag").equals(tag);
+    queryFilter.tag = tag;
   }
 
-
-  const totalNotes = await notesQuery.clone().countDocuments();
-  const notes = await notesQuery.sort({ [sortBy]: sortOrder }).skip(skip).limit(perPage);
+  const totalNotes = await Note.countDocuments(queryFilter);
+  const notes = await Note.find(queryFilter)
+    .sort({ [sortBy]: sortOrder })
+    .skip(skip)
+    .limit(perPage);
 
   const totalPages = Math.ceil(totalNotes / perPage);
 
