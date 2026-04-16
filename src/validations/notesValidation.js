@@ -54,7 +54,5 @@ export const getAllNotesSchema = {
     perPage: Joi.number().integer().min(5).max(20).default(10),
     tag: Joi.string().valid(...TAGS).optional(),
     search: Joi.string().trim().allow(''),
-    sortBy: Joi.string().valid("_id", "title", "content", "tag"),
-    sortOrder: Joi.string().valid("asc", "desc"),
   }),
 };

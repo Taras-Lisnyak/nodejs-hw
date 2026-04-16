@@ -55,7 +55,7 @@ export const updateNote = async (req, res) => {
 };
 
 export const getAllNotes = async (req, res) => {
-  const { page = 1, perPage = 10, search, tag, sortBy = "_id", sortOrder = "asc" } = req.query;
+  const { page = 1, perPage = 10, search, tag } = req.query;
   const skip = (page - 1) * perPage;
 
   const queryFilter = { userId: req.user._id };
@@ -68,11 +68,13 @@ export const getAllNotes = async (req, res) => {
     queryFilter.tag = tag;
   }
 
-  const totalNotes = await Note.countDocuments(queryFilter);
-  const notes = await Note.find(queryFilter)
-    .sort({ [sortBy]: sortOrder })
+  const totalNotesPromise = Note.countDocuments(queryFilter);
+  const notesPromise = Note.find(queryFilter)
+    .sort({ _id: 1 })
     .skip(skip)
     .limit(perPage);
+
+  const [totalNotes, notes] = await Promise.all([totalNotesPromise, notesPromise]);
 
   const totalPages = Math.ceil(totalNotes / perPage);
 
